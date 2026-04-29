@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Проверка номера телефона{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Валидация номера телефона</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('phone_validation') }}" novalidate>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Введите номер телефона:</label>
+                        <input type="text" 
+                               class="form-control {% if error %}is-invalid{% endif %}" 
+                               id="phone" 
+                               name="phone" 
+                               value="{{ phone_value }}"
+                               placeholder="+7 (123) 456-75-90"
+                               required>
+                        {% if error %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+                        <div class="form-text">
+                            Допустимые символы: цифры, пробелы, (, ), -, ., +
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Проверить</button>
+                    <a href="{{ url_for('phone_validation') }}" class="btn btn-secondary">Очистить</a>
+                </form>
+
+                {% if result %}
+                <div class="alert alert-success mt-4" role="alert">
+                    <h5 class="alert-heading">Номер принят!</h5>
+                    <p class="mb-0">Отформатированный номер: <strong>{{ result }}</strong></p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-footer">
+                <h6 class="mb-2">Примеры корректных номеров:</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="small mb-0">
+                            <li>+7 (123) 456-75-90</li>
+                            <li>8(123)4567590</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="small mb-0">
+                            <li>123.456.75.90</li>
+                            <li>+7 123 456 75 90</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок с описанием правил валидации -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Правила проверки</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Условие</th>
+                            <th>Сообщение об ошибке</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Не 10 или 11 цифр (если начинается с +7 или 8 - 11 цифр, иначе - 10)</td>
+                            <td><span class="badge bg-danger">Недопустимый ввод. Неверное количество цифр.</span></td>
+                        </tr>
+                        <tr>
+                            <td>Недопустимые символы (разрешены: цифры, пробелы, (, ), -, ., +)</td>
+                            <td><span class="badge bg-danger">Недопустимый ввод. В номере телефона встречаются недопустимые символы.</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
