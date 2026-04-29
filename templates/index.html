@@ -1,79 +1,52 @@
 {% extends 'base.html' %}
 
-{% block title %}Главная - Лабораторная работа{% endblock %}
+{% block title %}Главная - Flask Auth App{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="mb-4">Лабораторная работа по Flask</h1>
-        
-        <div class="alert alert-info">
-            <h4 class="alert-heading">Задание:</h4>
-            <p>Разработайте веб-приложение с использованием фреймворка Flask.</p>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Часть 1: Отображение данных запроса</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>Страницы для отображения:</p>
-                        <ul>
-                            <li>Параметры URL</li>
-                            <li>Заголовки запроса</li>
-                            <li>Cookie</li>
-                            <li>Параметры формы (авторизация)</li>
-                        </ul>
-                        <a href="{{ url_for('request_info') }}" class="btn btn-primary">Перейти к данным запроса</a>
-                        <a href="{{ url_for('login') }}" class="btn btn-success">Перейти к авторизации</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Часть 2: Форма с обработкой ошибок</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>Валидация номера телефона:</p>
-                        <ul>
-                            <li>Проверка формата номера</li>
-                            <li>Подсветка ошибок Bootstrap</li>
-                            <li>Форматирование результата</li>
-                        </ul>
-                        <a href="{{ url_for('phone_validation') }}" class="btn btn-success">Проверить телефон</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Примеры ввода телефона для тестирования:</h5>
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Добро пожаловать в приложение!</h4>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Корректные форматы:</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item">+7 (123) 456-75-90</li>
-                            <li class="list-group-item">8(123)4567590</li>
-                            <li class="list-group-item">123.456.75.90</li>
-                            <li class="list-group-item">+7 123 456 75 90</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Некорректные форматы:</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item text-danger">abc1234567 (недопустимые символы)</li>
-                            <li class="list-group-item text-danger">12345 (мало цифр)</li>
-                            <li class="list-group-item text-danger">1234567890123 (много цифр)</li>
-                        </ul>
-                    </div>
+                <h5 class="card-title">О приложении</h5>
+                <p class="card-text">
+                    Это веб-приложение демонстрирует работу с аутентификацией пользователей 
+                    и счетчиком посещений с использованием Flask и Flask-Login.
+                </p>
+                
+                <h5 class="mt-4">Функционал приложения:</h5>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Счетчик посещений</strong> - использует глобальный объект session 
+                        для подсчета количества посещений страницы
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Аутентификация</strong> - вход с логином "user" и паролем "qwerty"
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Секретная страница</strong> - доступна только авторизованным пользователям
+                    </li>
+                    <li class="list-group-item">
+                        <strong>"Запомнить меня"</strong> - сессия сохраняется после закрытия браузера
+                    </li>
+                </ul>
+
+                {% if current_user.is_authenticated %}
+                <div class="alert alert-success mt-4">
+                    <h6 class="alert-heading">Статус: Вы авторизованы</h6>
+                    <p class="mb-0">ID пользователя: {{ current_user.id }}</p>
                 </div>
+                {% else %}
+                <div class="alert alert-info mt-4">
+                    <h6 class="alert-heading">Статус: Вы не авторизованы</h6>
+                    <p class="mb-0">
+                        Для доступа к секретной странице необходимо 
+                        <a href="{{ url_for('login') }}" class="alert-link">войти в систему</a>.
+                    </p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
